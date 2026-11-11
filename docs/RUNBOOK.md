@@ -21,3 +21,8 @@ The Pages workflow runs after the Checks workflow succeeds for a main-branch pus
 
 ## Operational boundaries
 No authentication, customer uploads, multiuser edits, streaming ingestion, underwriting, or persistent prediction service. The model supports historical exploration only. Raw source remains local and downloadable from the original host. CI uses a clean Python environment; precise dependency versions are in requirements-lock.txt for the validated environment.
+
+## Distribution verification
+The real-data job builds the package wheel, replaces the editable installation, verifies dashboard resources, and rebuilds the pinned analysis. The command still requires a checkout containing SQL, source metadata and lockfile; this is an installable project tool, not a self-contained data bundle.
+
+Dashboard source is split into dashboard.html, dashboard.css and dashboard.js. The pipeline embeds and fingerprints those assets. Rebuild after source edits: a source-only change intentionally fails artifact verification. Share a section with its URL fragment, such as #robustness. No customer data, credentials or filters are sent to an analytics service.

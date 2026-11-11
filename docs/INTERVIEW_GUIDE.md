@@ -15,3 +15,9 @@ ClaimScope analyzes real motor insurance records with Python and SQL. It makes p
 9. What changes would be required before a business could operationalize the analysis.
 
 Use the generated memo for measured results. Describe your actual contribution accurately; do not imply manual verification against insurer systems, business deployment, or personal work you cannot explain. Rebuild the pipeline yourself and make one independently understood extension before relying on this project in an interview.
+
+## Uncertainty discussion examples
+- Explain why recorded cost of 940.26 for ages 18–24 belongs beside its 372.85–1,735.24 bootstrap interval and largest-policy share of 34.7%.
+- Contrast a Poisson frequency interval with a whole-policy empirical bootstrap. Neither represents unseen future tail losses or unknown customer dependence.
+- Explain why top-quartile resample share measures rank stability rather than future-risk probability.
+- Show how the built wheel and its dashboard assets are verified independently of editable installation.

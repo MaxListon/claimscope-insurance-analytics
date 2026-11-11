@@ -63,5 +63,10 @@
     "check": "Region-age cell reconciliation",
     "status": "PASS",
     "detail": "Region-age cells conserve policy count, exposure and reported claims"
+  },
+  {
+    "check": "Segment uncertainty reconciliation",
+    "status": "PASS",
+    "detail": "Every bootstrap segment matches SQL policy count, exposure, claim count, frequency and cost rate"
   }
 ]

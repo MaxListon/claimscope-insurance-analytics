@@ -13,11 +13,12 @@ import certifi
 import duckdb
 import numpy as np
 import rdata
-from .quality import validate_inputs, validate_warehouse
+from .quality import validate_inputs, validate_warehouse, validate_segment_robustness
 from .statistics import frequency_interval, bootstrap_cost
 from .model import fit_benchmark
 from .presentation import render, memo
 from .portfolio import standardize_regions, tail_diagnostics
+from .robustness import segment_robustness
 
 
 def digest(path):
@@ -44,7 +45,7 @@ def sources(root,offline=False):
             path.parent.mkdir(parents=True,exist_ok=True)
             tmp=path.with_suffix('.download')
             try:
-                request=urllib.request.Request(info['url'],headers={'User-Agent':'ClaimScope/1.1'})
+                request=urllib.request.Request(info['url'],headers={'User-Agent':'ClaimScope/1.2'})
                 with urllib.request.urlopen(request,timeout=120,context=ssl.create_default_context(cafile=certifi.where())) as response,open(tmp,'wb') as output:
                     shutil.copyfileobj(response,output)
                 if digest(tmp)!=info['sha256']: raise ValueError(f'Source fingerprint mismatch: {name}')
@@ -95,6 +96,9 @@ def build(root,offline=False):
               {'basis':'Exclude records above source 99th percentile','cost_per_year':float(f.IDpol.map(trimmed).fillna(0).sum()/exposure)}]
             aligned=f[f.reconciliation_status=='Aligned']
             sensitivity.append({'basis':'Count-aligned policies only (selected subset)','cost_per_year':float(aligned.recorded_amount.sum()/aligned.Exposure.sum())})
+            f['capped_recorded_amount']=f.IDpol.map(cap).fillna(0)
+            robustness=segment_robustness(f)
+            checks+=validate_segment_robustness(robustness,segments)
             model,calibration=fit_benchmark(f)
             regions,standardization=standardize_regions(f,cells=region_cells)
             support_sensitivity=[]
@@ -103,18 +107,19 @@ def build(root,offline=False):
                 scenario,support=standardize_regions(f,minimum_cell_exposure=threshold,cells=region_cells)
                 region_scenarios[str(threshold)]=json.loads(scenario.to_json(orient='records'))
                 support_sensitivity.append(support)
-            result={'region_scenarios':region_scenarios,'standardization':standardization,'support_sensitivity':support_sensitivity,'regions':json.loads(regions.to_json(orient='records')),'tail_influence':tail_diagnostics(claims,f),'source':metadata,'totals':{'policies':len(f),'exposure':exposure,'reported_claims':int(f.ClaimNb.sum()),'recorded_claims':linked_claims,'source_claim_records':len(claims),'source_amount':total_amount,'linked_amount':linked_amount,'orphan_records':int(orphan[0]),'orphan_amount':float(orphan[1]),'frequency':float(f.ClaimNb.sum()/exposure),'mean_recorded_claim':linked_amount/linked_claims,'cost_per_year':linked_amount/exposure,'mismatch_policies':int((f.reconciliation_status!='Aligned').sum()),'exposure_over_one':int((f.Exposure>1).sum()),'naive_join_exposure_inflation_pct':100*(naive/exposure-1),'largest_claim':float(amount.max()),'top_one_pct_amount_share':float(amount[amount>cutoff].sum()/total_amount),'p99_amount':cutoff,'cost_bootstrap_interval':bootstrap_cost(f),'frequency_interval':frequency_interval(int(f.ClaimNb.sum()),exposure)},'quality':checks,'segments':json.loads(segments.to_json(orient='records')),'reconciliation':json.loads(reconciliation.to_json(orient='records')),'sensitivity':sensitivity,'model':model,'calibration':json.loads(calibration.to_json(orient='records'))}
+            result={'segment_robustness':json.loads(robustness.to_json(orient='records')),'robustness_protocol':{'repetitions':400,'minimum_ranking_exposure':1000,'minimum_ranking_claims':30,'cost_cap':cutoff,'sampling':'Within-segment policy resampling; fixed segment sizes'},'region_scenarios':region_scenarios,'standardization':standardization,'support_sensitivity':support_sensitivity,'regions':json.loads(regions.to_json(orient='records')),'tail_influence':tail_diagnostics(claims,f),'source':metadata,'totals':{'policies':len(f),'exposure':exposure,'reported_claims':int(f.ClaimNb.sum()),'recorded_claims':linked_claims,'source_claim_records':len(claims),'source_amount':total_amount,'linked_amount':linked_amount,'orphan_records':int(orphan[0]),'orphan_amount':float(orphan[1]),'frequency':float(f.ClaimNb.sum()/exposure),'mean_recorded_claim':linked_amount/linked_claims,'cost_per_year':linked_amount/exposure,'mismatch_policies':int((f.reconciliation_status!='Aligned').sum()),'exposure_over_one':int((f.Exposure>1).sum()),'naive_join_exposure_inflation_pct':100*(naive/exposure-1),'largest_claim':float(amount.max()),'top_one_pct_amount_share':float(amount[amount>cutoff].sum()/total_amount),'p99_amount':cutoff,'cost_bootstrap_interval':bootstrap_cost(f),'frequency_interval':frequency_interval(int(f.ClaimNb.sum()),exposure)},'quality':checks,'segments':json.loads(segments.to_json(orient='records')),'reconciliation':json.loads(reconciliation.to_json(orient='records')),'sensitivity':sensitivity,'model':model,'calibration':json.loads(calibration.to_json(orient='records'))}
             reports=stage/'reports';reports.mkdir()
             (reports/'analysis.json').write_text(json.dumps(result,indent=2,allow_nan=False)+'\n')
             segments.to_csv(reports/'segments.csv',index=False)
             regions.to_csv(reports/'regions.csv',index=False)
+            robustness.to_csv(reports/'segment_robustness.csv',index=False)
             reconciliation.to_csv(reports/'reconciliation.csv',index=False)
             calibration.to_csv(reports/'calibration.csv',index=False)
             (reports/'EXECUTIVE_MEMO.md').write_text(memo(result))
             (reports/'quality.json').write_text(json.dumps(checks,indent=2)+'\n')
             # Generated HTML is offline-capable and contains aggregate results only.
             (stage/'index.html').write_text(render(result))
-            inputs={str(p.relative_to(root)):digest(p) for p in sorted((root/'src').rglob('*.py'))+sorted((root/'src').rglob('*.html'))+sorted((root/'sql').glob('*.sql'))+[root/'data/sources.json',root/'pyproject.toml',root/'requirements-lock.txt']}
+            inputs={str(p.relative_to(root)):digest(p) for p in sorted(p for p in (root/'src').rglob('*') if p.suffix in {'.py','.html','.css','.js'})+sorted((root/'sql').glob('*.sql'))+[root/'data/sources.json',root/'pyproject.toml',root/'requirements-lock.txt']}
             manifest={'schema_version':1,'inputs':inputs,'outputs':{str(p.relative_to(stage)):digest(p) for p in sorted(stage.rglob('*')) if p.is_file()}}
             (reports/'build_manifest.json').write_text(json.dumps(manifest,indent=2)+'\n')
             # Stage all computations before publication. Per-file replacements are atomic;

@@ -3,6 +3,7 @@ from pathlib import Path
 
 def memo(r):
     t=r['totals'];m=r['model']
+    young=next(row for row in r['segment_robustness'] if row['dimension']=='Driver age' and row['segment']=='18–24')
     return f"""# ClaimScope — portfolio review briefing
 
 ## Recommendation
@@ -25,6 +26,11 @@ Prioritize a review of large claims and exposure-adjusted segment differences. T
 
 The age adjustment and no-bonus model are diagnostic extensions developed after the original holdout was examined. They do not establish future-period performance or a new untouched validation result. Age standardization adjusts only for measured driver-age mix. Poisson intervals assume independent cell counts; the model bootstrap excludes training and population-shift uncertainty.
 
+## Segment uncertainty changes how to read the ranking
+For the 18–24 driver-age segment, recorded cost is {young['cost_per_year']:.2f} per policy-year, but the policy-bootstrap interval is wide: {young['cost_bootstrap_lower']:.2f}–{young['cost_bootstrap_upper']:.2f}. One policy contributes {100*young['largest_policy_amount_share']:.1f}% of that segment's recorded amount. Review its influence before interpreting the average as a stable future cost estimate.
+
+The robustness report covers every one of the {len(r['segment_robustness'])} SQL reporting segments. It retains full policy exposure, pairs frequency and amount in each resample, and compares original versus capped cost ranks. Cost-ranking stability is an exploratory within-sample diagnostic, not a forecast or a probability that a segment is intrinsically risky. Sampling assumes independent policies; repeated underlying customers cannot be grouped from the available fields.
+
 ## Follow-up before operational use
 The current source has no unmatched records or count discrepancies. Keep these checks as future-build controls. Request policy effective dates, claim IDs, valuation dates, earned premium, and reliable currency metadata. Reconcile a sample against original source records; manual reconciliation to insurer systems is unavailable here.
 
@@ -35,4 +41,6 @@ def render(data):
     template=Path(__file__).with_name('dashboard.html').read_text()
     # Escape characters that can terminate an embedded script element.
     payload=json.dumps(data,allow_nan=False).replace('<',r'\u003c').replace('>',r'\u003e').replace('&',r'\u0026')
-    return template.replace('__DATA__',payload)
+    return (template.replace('__STYLE__',Path(__file__).with_name('dashboard.css').read_text())
+            .replace('__SCRIPT__',Path(__file__).with_name('dashboard.js').read_text())
+            .replace('__DATA__',payload))

@@ -7,3 +7,6 @@ data/raw/*
 data/warehouse.duckdb*
 .build.lock
 .DS_Store
+
+build/
+dist/

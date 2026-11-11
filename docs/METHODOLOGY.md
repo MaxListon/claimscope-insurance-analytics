@@ -45,3 +45,12 @@ The no-bonus/malus sensitivity retains the original policy partitions and select
 The model improvement interval uses 400 paired policy resamples, seed 20261111. Each sampled policy carries its outcome, exposure, original prediction and baseline prediction together. Recompute relative exposure-weighted deviance improvement in each resample. This conditions on a fixed fitted model and excludes training variability, customer dependence and future-population drift.
 
 Cumulative top-1, top-5 and top-10 amount-record influence is reported separately from the percentile scenarios. Exclude those records from linked cost while retaining all original exposure; source amount shares include all source records. Identical amounts are ordered stably and not deduplicated.
+
+## Segment-level uncertainty and rank stability
+Within each reporting segment, independently resample whole policies with replacement 400 times, retaining paired exposure, reported count and linked recorded amount. Compress identical triples into multinomial multiplicities; this is equivalent to empirical policy resampling. Batches of 25 limit temporary memory. A namespaced SHA-256 of dimension and segment defines the seed.
+
+Each draw computes sum(count)/sum(exposure) and sum(amount)/sum(exposure). Central 95% percentile intervals condition on observed policies and fixed segment sizes. They avoid a Poisson outcome assumption but still assume independent policies and cannot represent unseen extreme losses. Repeated customers are not identifiable. Zero-claim segments have degenerate empirical frequency intervals; retain the complementary Poisson upper bound in the Segment explorer.
+
+Cost-ranking eligibility requires at least 1,000 policy-years and 30 reported claims. In each within-dimension draw, mark the highest-cost ceil(eligible segments/4), resolving exact ties by stable segment label order. The share of draws describes rank stability, not a posterior probability, future-risk probability or causal effect. These exploratory intervals have no simultaneous-coverage guarantee.
+
+The capped ranking uses the existing global source 99th claim-amount percentile and the same exposure. Cap individual claim records before policy aggregation. Largest-policy amount share uses combined policy amounts. Every bootstrap segment must reconcile policy count, exposure, claims, frequency and original cost with SQL reporting.

@@ -31,6 +31,12 @@ jobs:
           python-version: '3.12'
       - run: python -m pip install -r requirements-lock.txt
       - run: python -m pip install -e '.[dev]'
+      - name: Build and install distribution
+        run: |
+          python -m pip wheel --no-deps . -w /tmp/claimscope-wheel
+          python -m pip uninstall -y claimscope
+          python -m pip install --no-deps /tmp/claimscope-wheel/claimscope-*.whl
+          python -c "from importlib.resources import files; p=files('claimscope'); assert all(p.joinpath(n).is_file() for n in ['dashboard.html','dashboard.css','dashboard.js'])"
       - run: cp reports/analysis.json /tmp/baseline.json
       - run: python -m claimscope.pipeline
       - run: python scripts/compare_analysis.py /tmp/baseline.json reports/analysis.json

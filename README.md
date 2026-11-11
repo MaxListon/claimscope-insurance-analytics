@@ -19,6 +19,12 @@ An auditable reporting system for real French motor insurance data. ClaimScope s
 
 The [decision brief](reports/EXECUTIVE_MEMO.md) explains the implications and limitations. These historical findings support investigation, not realized savings or future-year performance claims.
 
+## A finding worth investigating
+
+The 18–24 driver-age segment has recorded cost of **940.26 per policy-year**, with a wide policy-bootstrap interval of **372.85–1,735.24**. A single policy contributes **34.7%** of its recorded amount. Investigate tail influence and uncertainty before treating an average as a stable future cost.
+
+The Segment robustness view covers all 42 reporting segments, preserving policy-level frequency, amount and exposure together. Rank stability is exploratory; it is not a future-risk probability or a pricing rule.
+
 ## The decision
 Which portfolio segments warrant investigation, and can the underlying figures be trusted? The deliverable is a review shortlist and a reconciliation report, not a pricing engine. The output helps prioritize data review and segment investigation; it does not quote insurance premiums.
 
@@ -26,6 +32,7 @@ Which portfolio segments warrant investigation, and can the underlying figures b
 - Two pinned original CASdatasets R data files, read directly in Python. No R installation is needed.
 - SQL marts that aggregate claims before joining policies, preserve zero-claim policies, and retain unmatched records for reconciliation.
 - Six segmentation dimensions, frequency intervals, policy-level cost bootstrap, and large-claim influence diagnostics.
+- Policy-bootstrap frequency and cost intervals for all 42 reporting segments, capped-cost rank sensitivity, and exploratory top-quartile rank stability.
 - Direct age-standardized regional comparisons with common exposure weights, explicit population-support rules, and 50/100/250-policy-year sensitivity views.
 - A regularized Poisson frequency benchmark with deterministic policy-level train / validation / test partitions and exposure-weighted evaluation, paired uncertainty, and a frozen no-bonus/malus sensitivity model.
 - An offline interactive dashboard with segment filters, metric switching, CSV export, reconciliation and calibration views.
@@ -66,7 +73,7 @@ Pinned .rda sources → SHA-256 verification → input contracts
 
 ## Verification
 
-30 regression tests cover reporting grain, invalid data, missing population support, a Simpson’s-paradox counterexample, holdout isolation, and source integrity. Thirteen runtime contracts reconcile the reporting layers. Full source rebuilds run on GitHub for every push. Dashboard deployment waits for successful checks.
+43 regression tests cover reporting grain, invalid data, missing population support, a Simpson’s-paradox counterexample, holdout isolation, and source integrity. Fourteen runtime contracts reconcile the reporting layers. Full source rebuilds run on GitHub for every push using a built and installed Python wheel, including the packaged dashboard assets. Dashboard deployment waits for successful checks.
 
 [Verification record](docs/VERIFICATION.md) · [Release review checklist](docs/REVIEW_CHECKLIST.md)
 

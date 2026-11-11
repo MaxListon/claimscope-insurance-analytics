@@ -20,6 +20,11 @@ Prioritize a review of large claims and exposure-adjusted segment differences. T
 
 The age adjustment and no-bonus model are diagnostic extensions developed after the original holdout was examined. They do not establish future-period performance or a new untouched validation result. Age standardization adjusts only for measured driver-age mix. Poisson intervals assume independent cell counts; the model bootstrap excludes training and population-shift uncertainty.
 
+## Segment uncertainty changes how to read the ranking
+For the 18–24 driver-age segment, recorded cost is 940.26 per policy-year, but the policy-bootstrap interval is wide: 372.85–1735.24. One policy contributes 34.7% of that segment's recorded amount. Review its influence before interpreting the average as a stable future cost estimate.
+
+The robustness report covers every one of the 42 SQL reporting segments. It retains full policy exposure, pairs frequency and amount in each resample, and compares original versus capped cost ranks. Cost-ranking stability is an exploratory within-sample diagnostic, not a forecast or a probability that a segment is intrinsically risky. Sampling assumes independent policies; repeated underlying customers cannot be grouped from the available fields.
+
 ## Follow-up before operational use
 The current source has no unmatched records or count discrepancies. Keep these checks as future-build controls. Request policy effective dates, claim IDs, valuation dates, earned premium, and reliable currency metadata. Reconcile a sample against original source records; manual reconciliation to insurer systems is unavailable here.
 

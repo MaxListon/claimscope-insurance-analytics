@@ -23,3 +23,14 @@ The first Linux reproduction exposed nondeterministic ordering of grouped reconc
 - Artifact verification now compares the published report copies as well as their source outputs and raises explicit exceptions even when Python assertions are disabled.
 
 The original test partition had already been inspected before these diagnostic extensions. No new untouched-test or future-period validation claim is made.
+
+## Uncertainty and distribution edition (v1.2)
+
+- Added frequency/cost policy-bootstrap intervals for 42 reporting segments, largest-policy influence, capped-cost ranks and exploratory top-quartile resample shares.
+- Extended to 43 regression tests and fourteen runtime contracts, including bootstrap-segment reconciliation to SQL.
+- Added rejection of normalized identifier collisions and blank/padded IDs, plus finite vehicle-power validation.
+- Separated readable HTML, CSS and JavaScript source assets; the generated dashboard remains a single offline page.
+- Added addressable sections and a dedicated uncertainty view with explicit ranking support rules.
+- The real-data job builds and installs a wheel, checks its dashboard assets, and rebuilds original data through the installed package.
+
+These checks verify reproducibility and reporting integrity. Business-user acceptance, independent external review and later-period validation require additional evidence.
