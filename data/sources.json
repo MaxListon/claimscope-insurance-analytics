@@ -1,0 +1,18 @@
+{
+  "repository": "https://github.com/dutangc/CASdatasets",
+  "commit": "227fb56b8734bdb7c0327a41180e01d2ddaeaf26",
+  "package_license": "GPL (>= 2)",
+  "documentation": "https://dutangc.github.io/CASdatasets/reference/freMTPL.html",
+  "files": {
+    "freMTPL2sev.rda": {
+      "url": "https://raw.githubusercontent.com/dutangc/CASdatasets/227fb56b8734bdb7c0327a41180e01d2ddaeaf26/data/freMTPL2sev.rda",
+      "sha256": "78e6e5016ae046603b37e88ff8ad8ca327f5d59f827c1f75d140388de09b14b3",
+      "bytes": 267650
+    },
+    "freMTPL2freq.rda": {
+      "url": "https://raw.githubusercontent.com/dutangc/CASdatasets/227fb56b8734bdb7c0327a41180e01d2ddaeaf26/data/freMTPL2freq.rda",
+      "sha256": "82c8598513d9fa78226b6c7d271a9940eca4b8083e9e32320a75d377bdfe15a3",
+      "bytes": 9282770
+    }
+  }
+}

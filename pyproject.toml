@@ -1,0 +1,21 @@
+[build-system]
+requires = ["setuptools>=75"]
+build-backend = "setuptools.build_meta"
+[project]
+name = "claimscope"
+version = "1.0.0"
+description = "Auditable motor insurance portfolio reporting and frequency analysis"
+requires-python = ">=3.12"
+dependencies = ["duckdb>=1.2,<3", "pandas>=2.2,<4", "numpy>=2,<3", "scipy>=1.14,<2", "scikit-learn>=1.5,<2", "rdata>=1.0,<2", "certifi>=2024.0"]
+[project.optional-dependencies]
+dev = ["pytest>=8,<10"]
+[project.scripts]
+claimscope = "claimscope.pipeline:main"
+[tool.setuptools.packages.find]
+where = ["src"]
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+testpaths = ["tests"]
+
+[tool.setuptools.package-data]
+claimscope = ["dashboard.html"]
