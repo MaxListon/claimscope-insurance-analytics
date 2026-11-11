@@ -20,3 +20,9 @@ SELECT reconciliation_status, count(*) policies,sum(Exposure) exposure,
  sum(ClaimNb) reported_claims,sum(recorded_claims) recorded_claims,
  sum(recorded_amount) recorded_amount
 FROM policy_mart GROUP BY reconciliation_status;
+
+-- Reusable age-by-region grain for standardization and population support review.
+CREATE OR REPLACE TABLE region_age_cells AS
+SELECT Region, driver_band, count(*) policies, sum(Exposure) exposure,
+       sum(ClaimNb) reported_claims
+FROM policy_mart GROUP BY Region, driver_band ORDER BY Region, driver_band;

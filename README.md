@@ -1,6 +1,6 @@
 # ClaimScope — insurance portfolio intelligence
 
-An auditable reporting system for real French motor insurance data. ClaimScope shows how exposure, claim count discrepancies, and large losses change the story behind a portfolio dashboard.
+An auditable reporting system for real French motor insurance data. ClaimScope separates claim frequency, portfolio mix, and large-loss concentration, with reconciled SQL reporting and explicit uncertainty.
 
 **Python · SQL · DuckDB · statistical uncertainty · business intelligence**
 
@@ -8,14 +8,26 @@ An auditable reporting system for real French motor insurance data. ClaimScope s
 
 ![ClaimScope dashboard](docs/dashboard-preview.png)
 
+[![Verified checks](https://github.com/MaxListon/claimscope-insurance-analytics/actions/workflows/checks.yml/badge.svg)](https://github.com/MaxListon/claimscope-insurance-analytics/actions/workflows/checks.yml)
+
+## Evidence at a glance
+
+- **677,991 policies / 358,482.84 policy-years**, with 26,444 claim records and exact policy-level count reconciliation.
+- **38.0% of source cost** sits strictly above the 99th claim-amount percentile; the largest record alone contributes 6.80%.
+- **16 of 22 regions** support primary age standardization, covering 97.4% of portfolio exposure.
+- **4.08% lower held-out deviance** than a constant-rate baseline (95% paired bootstrap interval: 3.63%–4.48%). Removing bonus/malus leaves 1.63% improvement.
+
+The [decision brief](reports/EXECUTIVE_MEMO.md) explains the implications and limitations. These historical findings support investigation, not realized savings or future-year performance claims.
+
 ## The decision
-Which portfolio segments warrant investigation, and can the underlying figures be trusted? The deliverable is a review shortlist and a reconciliation report, not a pricing engine. It complements product experiment, retention, and loan workflow projects with exposure-based insurance reporting.
+Which portfolio segments warrant investigation, and can the underlying figures be trusted? The deliverable is a review shortlist and a reconciliation report, not a pricing engine. The output helps prioritize data review and segment investigation; it does not quote insurance premiums.
 
 ## What is built
 - Two pinned original CASdatasets R data files, read directly in Python. No R installation is needed.
 - SQL marts that aggregate claims before joining policies, preserve zero-claim policies, and retain unmatched records for reconciliation.
-- Six segmentation dimensions, frequency intervals, policy-level cost bootstrap, and large-claim sensitivity analysis.
-- A regularized Poisson frequency benchmark with deterministic policy-level train / validation / test partitions and exposure-weighted evaluation.
+- Six segmentation dimensions, frequency intervals, policy-level cost bootstrap, and large-claim influence diagnostics.
+- Direct age-standardized regional comparisons with common exposure weights, explicit population-support rules, and 50/100/250-policy-year sensitivity views.
+- A regularized Poisson frequency benchmark with deterministic policy-level train / validation / test partitions and exposure-weighted evaluation, paired uncertainty, and a frozen no-bonus/malus sensitivity model.
 - An offline interactive dashboard with segment filters, metric switching, CSV export, reconciliation and calibration views.
 - Blocking input and reporting contracts, integrity fingerprints, staged report generation, a single-writer lock, regression tests, and GitHub Actions.
 
@@ -51,6 +63,12 @@ Pinned .rda sources → SHA-256 verification → input contracts
 ```
 
 [Runbook](docs/RUNBOOK.md) · [Data dictionary](docs/DATA_DICTIONARY.md) · [Six-week development scope](docs/DEVELOPMENT_SCOPE.md) · [Interview guide](docs/INTERVIEW_GUIDE.md)
+
+## Verification
+
+30 regression tests cover reporting grain, invalid data, missing population support, a Simpson’s-paradox counterexample, holdout isolation, and source integrity. Thirteen runtime contracts reconcile the reporting layers. Full source rebuilds run on GitHub for every push. Dashboard deployment waits for successful checks.
+
+[Verification record](docs/VERIFICATION.md) · [Release review checklist](docs/REVIEW_CHECKLIST.md)
 
 ## Scope and attribution
 Data: freMTPL2freq and freMTPL2sev in [CASdatasets](https://github.com/dutangc/CASdatasets), maintained by Christophe Dutang, Arthur Charpentier, and contributors. The upstream package declares GPL (>= 2); source versions and links are in `data/sources.json`. Dataset authorship is distinct from this repository's commit authorship. No underlying raw data are committed.

@@ -12,3 +12,14 @@ These are local verification results. GitHub Actions results are separate eviden
 ## Cloud verification follow-up
 
 The first Linux reproduction exposed nondeterministic ordering of grouped reconciliation checks. The checks themselves passed, but their sequence differed from the committed JSON. The reporting query now explicitly orders dimensions, and the regression suite requires a stable order. Full data reproduction runs on every push as well as manual dispatch.
+
+## Portfolio review edition (v1.1)
+
+- Added direct age standardization using the full portfolio exposure mix, with explicit 50/100/250-policy-year population-support sensitivity. The primary rule supports 16 of 22 regions and 97.4% of exposure.
+- Added a fixed-split, fixed-alpha model sensitivity without bonus/malus, and 400 paired policy-bootstrap resamples for original model improvement.
+- Extended the suite to 30 tests, including a deliberately reversed crude/adjusted ranking example and missing-stratum rejection. Thirteen runtime contracts now reconcile the region-age reporting grain too.
+- Added keyboard-accessible tabs, an executive summary, regional comparison views and model dependency reporting.
+- Added dashboard script syntax checks and a deployment gate: the dashboard publishes the checked main-branch commit only after the complete Checks workflow succeeds.
+- Artifact verification now compares the published report copies as well as their source outputs and raises explicit exceptions even when Python assertions are disabled.
+
+The original test partition had already been inspected before these diagnostic extensions. No new untouched-test or future-period validation claim is made.

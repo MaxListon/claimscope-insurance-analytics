@@ -58,5 +58,10 @@
     "check": "Segment reconciliation: Vehicle age",
     "status": "PASS",
     "detail": "Every dimension reconciles all five base totals"
+  },
+  {
+    "check": "Region-age cell reconciliation",
+    "status": "PASS",
+    "detail": "Region-age cells conserve policy count, exposure and reported claims"
   }
 ]

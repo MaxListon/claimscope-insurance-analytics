@@ -33,4 +33,6 @@ def validate_warehouse(con):
     for row in con.execute('SELECT dimension,sum(policies),sum(exposure),sum(reported_claims),sum(recorded_claims),sum(recorded_amount) FROM segment_report GROUP BY dimension ORDER BY dimension').fetchall():
         expected=[m[0],m[1],m[2],b[0],b[1]]
         check(f'Segment reconciliation: {row[0]}',all(math.isclose(x,y,rel_tol=1e-9) for x,y in zip(row[1:],expected)),'Every dimension reconciles all five base totals')
+    cells=con.execute('SELECT sum(policies),sum(exposure),sum(reported_claims) FROM region_age_cells').fetchone()
+    check('Region-age cell reconciliation',all(math.isclose(x,y,rel_tol=1e-9) for x,y in zip(cells,m)),'Region-age cells conserve policy count, exposure and reported claims')
     return checks

@@ -17,7 +17,7 @@ All calculations, contracts, model fitting, and report rendering complete in a t
 `reports/build_manifest.json` hashes source code, SQL, template, source metadata, dependency specification, and generated artifacts. Hashes detect changes; they do not authenticate a malicious publisher. Run tests and the artifact verifier before publishing.
 
 ## Deploy dashboard on GitHub Pages
-Use the included Pages workflow to publish docs plus aggregate reports. No Python backend, private policy data, database, or raw source is deployed. An intentional source build requires the full-data workflow; normal unit tests use fixtures. Review the workflow result before presenting a new dashboard version.
+The Pages workflow runs after the Checks workflow succeeds for a main-branch push, checks out that verified commit, and publishes docs plus aggregate reports. No Python backend, private policy data, database, or raw source is deployed. An intentional source build requires the full-data workflow; normal unit tests use fixtures. Review the workflow result before presenting a new dashboard version.
 
 ## Operational boundaries
 No authentication, customer uploads, multiuser edits, streaming ingestion, underwriting, or persistent prediction service. The model supports historical exploration only. Raw source remains local and downloadable from the original host. CI uses a clean Python environment; precise dependency versions are in requirements-lock.txt for the validated environment.

@@ -11,4 +11,4 @@ This is a realistic learning and independent development schedule, not a claim t
 | 5 | Build dashboard and executive narrative | Interactive report, CSV export, decision memo |
 | 6 | Reproduce in a clean environment, review limitations, add an independent extension | Passing CI, review notes, documented extension |
 
-Useful personal extension: compare the current Poisson intervals against a policy-bootstrap frequency interval for a few prespecified segments. Explain any divergence without selecting segments based only on extreme results. A second option is a within-region standardization analysis that illustrates portfolio-mix confounding; predefine weights and exclusions before interpreting rankings.
+Useful personal extension: compare the current Poisson intervals against a policy-bootstrap frequency interval for a few prespecified segments. Explain any divergence without selecting segments based only on extreme results. The repository now includes age-standardized regional comparisons. An additional extension could investigate whether these rankings remain stable after a prespecified vehicle-age adjustment, with explicit overlap and exposure requirements.

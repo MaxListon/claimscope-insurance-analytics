@@ -33,3 +33,15 @@ Fit annual rate = ClaimNb / Exposure with Exposure as sample weight. For a log-l
 Categorical bands are defined in SQL before analysis. Fit one-hot categories on training rows only. Unknown categories are ignored by the encoder. Compare alpha 0.001, 0.01, 0.1 using validation deviance. Freeze the selected model without refitting and evaluate the test partition against a constant training frequency. Decile calibration is descriptive; risk deciles are formed within the holdout. No timing metadata proves all predictors were available at original underwriting, especially bonus/malus.
 
 The dashboard exposes benchmark limitations and a baseline comparison. There is no scoring API, pricing decision, or fairness certification.
+
+## Direct regional age standardization
+The full portfolio reference weight for each age band is its exposure divided by all portfolio exposure. A region's standardized frequency is the sum of reference weights multiplied by its age-band frequencies. Reference weights are never renormalized around an unsupported band. The primary support rule is at least 100 policy-years in every reference band, fixed before inspecting these new results; sensitivity views use 50 and 250. Unsupported regions remain in the report and coverage denominator.
+
+Ranks compare supported regions only. Approximate 95% intervals use variance sum(weight² × count / exposure²), independent Poisson cell counts, and a normal approximation truncated at zero. They exclude portfolio-reference uncertainty and heterogeneity. Multiple exploratory rankings are not significance tests. Age adjustment cannot remove other measured or unmeasured differences and is not a causal regional effect.
+
+## Diagnostic extensions and model uncertainty
+The no-bonus/malus sensitivity retains the original policy partitions and selected alpha, fits on training rows only, and does not select a replacement model using test performance. It was developed after the original holdout was inspected, so it is explicitly a post-holdout diagnostic. Bonus/malus timing remains unverified; removal is not proof that all remaining features were available at original underwriting.
+
+The model improvement interval uses 400 paired policy resamples, seed 20261111. Each sampled policy carries its outcome, exposure, original prediction and baseline prediction together. Recompute relative exposure-weighted deviance improvement in each resample. This conditions on a fixed fitted model and excludes training variability, customer dependence and future-population drift.
+
+Cumulative top-1, top-5 and top-10 amount-record influence is reported separately from the percentile scenarios. Exclude those records from linked cost while retaining all original exposure; source amount shares include all source records. Identical amounts are ordered stably and not deduplicated.

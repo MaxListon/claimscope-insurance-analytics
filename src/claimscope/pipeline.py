@@ -17,6 +17,7 @@ from .quality import validate_inputs, validate_warehouse
 from .statistics import frequency_interval, bootstrap_cost
 from .model import fit_benchmark
 from .presentation import render, memo
+from .portfolio import standardize_regions, tail_diagnostics
 
 
 def digest(path):
@@ -43,7 +44,7 @@ def sources(root,offline=False):
             path.parent.mkdir(parents=True,exist_ok=True)
             tmp=path.with_suffix('.download')
             try:
-                request=urllib.request.Request(info['url'],headers={'User-Agent':'ClaimScope/1.0'})
+                request=urllib.request.Request(info['url'],headers={'User-Agent':'ClaimScope/1.1'})
                 with urllib.request.urlopen(request,timeout=120,context=ssl.create_default_context(cafile=certifi.where())) as response,open(tmp,'wb') as output:
                     shutil.copyfileobj(response,output)
                 if digest(tmp)!=info['sha256']: raise ValueError(f'Source fingerprint mismatch: {name}')
@@ -73,6 +74,7 @@ def build(root,offline=False):
                 segments=con.execute('SELECT * FROM segment_report ORDER BY dimension,segment').df()
                 reconciliation=con.execute('SELECT * FROM reconciliation_report ORDER BY reconciliation_status').df()
                 orphan=con.execute('SELECT count(*),coalesce(sum(ClaimAmount),0) FROM orphan_claims').fetchone()
+                region_cells=con.execute('SELECT Region,driver_band,exposure,reported_claims AS claims FROM region_age_cells').df()
                 naive=con.execute('SELECT sum(p.Exposure) FROM policies p LEFT JOIN claims c USING(IDpol)').fetchone()[0]
             finally:con.close()
             for i,row in segments.iterrows():
@@ -94,10 +96,18 @@ def build(root,offline=False):
             aligned=f[f.reconciliation_status=='Aligned']
             sensitivity.append({'basis':'Count-aligned policies only (selected subset)','cost_per_year':float(aligned.recorded_amount.sum()/aligned.Exposure.sum())})
             model,calibration=fit_benchmark(f)
-            result={'source':metadata,'totals':{'policies':len(f),'exposure':exposure,'reported_claims':int(f.ClaimNb.sum()),'recorded_claims':linked_claims,'source_claim_records':len(claims),'source_amount':total_amount,'linked_amount':linked_amount,'orphan_records':int(orphan[0]),'orphan_amount':float(orphan[1]),'frequency':float(f.ClaimNb.sum()/exposure),'mean_recorded_claim':linked_amount/linked_claims,'cost_per_year':linked_amount/exposure,'mismatch_policies':int((f.reconciliation_status!='Aligned').sum()),'exposure_over_one':int((f.Exposure>1).sum()),'naive_join_exposure_inflation_pct':100*(naive/exposure-1),'largest_claim':float(amount.max()),'top_one_pct_amount_share':float(amount[amount>cutoff].sum()/total_amount),'p99_amount':cutoff,'cost_bootstrap_interval':bootstrap_cost(f),'frequency_interval':frequency_interval(int(f.ClaimNb.sum()),exposure)},'quality':checks,'segments':json.loads(segments.to_json(orient='records')),'reconciliation':json.loads(reconciliation.to_json(orient='records')),'sensitivity':sensitivity,'model':model,'calibration':json.loads(calibration.to_json(orient='records'))}
+            regions,standardization=standardize_regions(f,cells=region_cells)
+            support_sensitivity=[]
+            region_scenarios={}
+            for threshold in [50,100,250]:
+                scenario,support=standardize_regions(f,minimum_cell_exposure=threshold,cells=region_cells)
+                region_scenarios[str(threshold)]=json.loads(scenario.to_json(orient='records'))
+                support_sensitivity.append(support)
+            result={'region_scenarios':region_scenarios,'standardization':standardization,'support_sensitivity':support_sensitivity,'regions':json.loads(regions.to_json(orient='records')),'tail_influence':tail_diagnostics(claims,f),'source':metadata,'totals':{'policies':len(f),'exposure':exposure,'reported_claims':int(f.ClaimNb.sum()),'recorded_claims':linked_claims,'source_claim_records':len(claims),'source_amount':total_amount,'linked_amount':linked_amount,'orphan_records':int(orphan[0]),'orphan_amount':float(orphan[1]),'frequency':float(f.ClaimNb.sum()/exposure),'mean_recorded_claim':linked_amount/linked_claims,'cost_per_year':linked_amount/exposure,'mismatch_policies':int((f.reconciliation_status!='Aligned').sum()),'exposure_over_one':int((f.Exposure>1).sum()),'naive_join_exposure_inflation_pct':100*(naive/exposure-1),'largest_claim':float(amount.max()),'top_one_pct_amount_share':float(amount[amount>cutoff].sum()/total_amount),'p99_amount':cutoff,'cost_bootstrap_interval':bootstrap_cost(f),'frequency_interval':frequency_interval(int(f.ClaimNb.sum()),exposure)},'quality':checks,'segments':json.loads(segments.to_json(orient='records')),'reconciliation':json.loads(reconciliation.to_json(orient='records')),'sensitivity':sensitivity,'model':model,'calibration':json.loads(calibration.to_json(orient='records'))}
             reports=stage/'reports';reports.mkdir()
             (reports/'analysis.json').write_text(json.dumps(result,indent=2,allow_nan=False)+'\n')
             segments.to_csv(reports/'segments.csv',index=False)
+            regions.to_csv(reports/'regions.csv',index=False)
             reconciliation.to_csv(reports/'reconciliation.csv',index=False)
             calibration.to_csv(reports/'calibration.csv',index=False)
             (reports/'EXECUTIVE_MEMO.md').write_text(memo(result))

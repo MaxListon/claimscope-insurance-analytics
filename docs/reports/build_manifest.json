@@ -2,26 +2,28 @@
   "schema_version": 1,
   "inputs": {
     "src/claimscope/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-    "src/claimscope/model.py": "68bca4183f69d2f3992bb3155150420431bff4b5a95fdf3372f4bbfd3a2a4f78",
-    "src/claimscope/pipeline.py": "fdd40a79a7b615a5e623f97a0013e5e17fe9a92df3e36c32fc31369f6656e21b",
-    "src/claimscope/presentation.py": "ae4a7c9061209c6301c7e7c6de84fe280ece85078a80212f1a2d521aa8b9c6af",
-    "src/claimscope/quality.py": "8f72733d36cb5a27bef24b28204166945354fbe13a82790165e7689195582540",
+    "src/claimscope/model.py": "f00b95beff0d963608f52805531cdaa79149bd63b7808875056cad2781268a2c",
+    "src/claimscope/pipeline.py": "ef8792cea4605de25c2e95537249f9172ddcf7a803107a6a40282f2371bf94ae",
+    "src/claimscope/portfolio.py": "4b90af6b8a6182a4fe5e106e270dd9cb0712dd807c34624ca2d12f2764b5368d",
+    "src/claimscope/presentation.py": "1307b49067e76a8a06a93de164f601ae2d765cd1d5695e1adbce1ac4e542bb44",
+    "src/claimscope/quality.py": "cc8be61c2fc1e64e42791ba0769b676c11b2552bb60b2a0f1b0f4bd58fd7b229",
     "src/claimscope/statistics.py": "8d2632e29e93333b9be11b586aa94f65ba8323327c5c8f3d56fae08a7ea4aa28",
-    "src/claimscope/dashboard.html": "fab10e1fa490f337538cd493034083e029d81ecf5b18a9ea8edc46cf4ec8f104",
+    "src/claimscope/dashboard.html": "4596db10ecdee40a851d223c0400e85f032531348af5457ac1881a4c808ec0dd",
     "sql/01_policy_mart.sql": "75c6f1c9eecf168db8baafb3e48426598a45a555cc36d7c1b82bb92d5adf2cbb",
-    "sql/02_reporting.sql": "3ab0d84ac59a00a0e38b789670603fbb49590ca0f1672189189cd87fe93ea86d",
+    "sql/02_reporting.sql": "a2c06e75f18a1d6a903adb0a6456a58ad74c426d2ca3e37979dfc7838c7067ee",
     "data/sources.json": "17cfa1d0b01baf357c2caba068b334487c068dd62fc37d14be9e0e7c959428ff",
-    "pyproject.toml": "bf07b8f7fa4ffbeae31886aba540d0000ce520c3ad07d7ed28b9f395eaa5a62c",
+    "pyproject.toml": "364dd346a64b1cf679628a20f59a10995005f9cde48cddb252c5f4d587c8b015",
     "requirements-lock.txt": "3470a75908483ae693e39f4b8ba482cb0733831111de1464ca954e541e881623"
   },
   "outputs": {
-    "index.html": "77c9a10966a4df160b7489b025461a35b12bf808b40879ff442c0cb76aa3bf18",
-    "reports/EXECUTIVE_MEMO.md": "77eeb15573ce0e9275a1d60151a3658c303e8a0003898c796e8bf47071521350",
-    "reports/analysis.json": "8e88d869282cace68aded0a01434057f878f28814abc6dfbdfdb664a8f10b801",
+    "index.html": "12aa4b897684ba4164f0d62df14281e0489a025afc1124736a7587110b64ad1a",
+    "reports/EXECUTIVE_MEMO.md": "64be54a7e7164e9d24d5a1f1f0c1130ba7ef07e839e7841ed253c97bf304b6ff",
+    "reports/analysis.json": "bf2a394322b68e51906db91ffd577448ae09c57a5e0492836c2eeb51321682ef",
     "reports/calibration.csv": "907f8bd1e9b89aad0c9cb6a2228c5e41a0431301c73ebf5cf53303fa322dc24e",
-    "reports/quality.json": "e3bf606e10397cc1ac8133102193aa85b41cdaa9c4cecb69ef79e98447a690c7",
+    "reports/quality.json": "dd1ce52e718472cbd1057919bceb8d8507e7c7d693a558159ebb1044d7589add",
     "reports/reconciliation.csv": "86b37cd6721b380d3e2d893c7fcb71e18f27d3b0a3882a8ea7018078b0dbfef0",
-    "reports/segments.csv": "b15e43c97fe9ee972d68a9b816d6c8e8c5639919bac108d4b863aa162f6205f2",
-    "warehouse.duckdb": "f4d47194e34a75cbcee19b492b4132d6c4bceb0e327c3e3ffb8d0392b73c2471"
+    "reports/regions.csv": "d0d0f5b4c7eb6b2a665bc1cef705d3e856115a5be0dfc1951b6a0c41446d4f29",
+    "reports/segments.csv": "347f9cfe377603cb5a527272d6cf2772dc5083f52e75e37416536e1d6443f907",
+    "warehouse.duckdb": "1b10e46e0468ef58e5edf1ffd8d21d96aa4ec3135eda01a0ef92f2a7aa9002e6"
   }
 }
