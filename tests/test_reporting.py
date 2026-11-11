@@ -29,7 +29,11 @@ def test_join_does_not_multiply_exposure(portfolio):
     assert con.execute('SELECT sum(Exposure) FROM policy_mart').fetchone()[0]==2.5
     assert con.execute('SELECT count(*) FROM policy_mart').fetchone()[0]==3
     assert con.execute("SELECT recorded_amount FROM policy_mart WHERE IDpol='a'").fetchone()[0]==30
-    assert all(c['status']=='PASS' for c in validate_warehouse(con));con.close()
+    checks=validate_warehouse(con)
+    assert all(c['status']=='PASS' for c in checks)
+    names=[c['check'] for c in checks if c['check'].startswith('Segment reconciliation:')]
+    assert names==sorted(names)
+    con.close()
 
 def test_zero_claim_and_orphan_retained(portfolio):
     con=warehouse(*portfolio)

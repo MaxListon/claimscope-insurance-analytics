@@ -30,7 +30,22 @@
     "detail": "Matched + orphan amounts/records equal source"
   },
   {
+    "check": "Segment reconciliation: Area",
+    "status": "PASS",
+    "detail": "Every dimension reconciles all five base totals"
+  },
+  {
+    "check": "Segment reconciliation: Bonus / malus",
+    "status": "PASS",
+    "detail": "Every dimension reconciles all five base totals"
+  },
+  {
     "check": "Segment reconciliation: Driver age",
+    "status": "PASS",
+    "detail": "Every dimension reconciles all five base totals"
+  },
+  {
+    "check": "Segment reconciliation: Fuel",
     "status": "PASS",
     "detail": "Every dimension reconciles all five base totals"
   },
@@ -41,21 +56,6 @@
   },
   {
     "check": "Segment reconciliation: Vehicle age",
-    "status": "PASS",
-    "detail": "Every dimension reconciles all five base totals"
-  },
-  {
-    "check": "Segment reconciliation: Bonus / malus",
-    "status": "PASS",
-    "detail": "Every dimension reconciles all five base totals"
-  },
-  {
-    "check": "Segment reconciliation: Area",
-    "status": "PASS",
-    "detail": "Every dimension reconciles all five base totals"
-  },
-  {
-    "check": "Segment reconciliation: Fuel",
     "status": "PASS",
     "detail": "Every dimension reconciles all five base totals"
   }

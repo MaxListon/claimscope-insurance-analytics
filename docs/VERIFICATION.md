@@ -8,3 +8,7 @@
 - Source, SQL, template and output integrity verified against the generated build manifest.
 
 These are local verification results. GitHub Actions results are separate evidence; CI is not described as passed until its run completes. No insurer-system reconciliation, business-user acceptance, future-period validation, or production underwriting deployment has been performed.
+
+## Cloud verification follow-up
+
+The first Linux reproduction exposed nondeterministic ordering of grouped reconciliation checks. The checks themselves passed, but their sequence differed from the committed JSON. The reporting query now explicitly orders dimensions, and the regression suite requires a stable order. Full data reproduction runs on every push as well as manual dispatch.

@@ -30,7 +30,7 @@ def validate_warehouse(con):
     o=con.execute('SELECT count(*),coalesce(sum(ClaimAmount),0) FROM orphan_claims').fetchone()
     for i,label in enumerate(['Claim record conservation','Recorded amount conservation']):
         check(label,math.isclose(a[i],b[i]+o[i],rel_tol=1e-10),'Matched + orphan amounts/records equal source')
-    for row in con.execute('SELECT dimension,sum(policies),sum(exposure),sum(reported_claims),sum(recorded_claims),sum(recorded_amount) FROM segment_report GROUP BY dimension').fetchall():
+    for row in con.execute('SELECT dimension,sum(policies),sum(exposure),sum(reported_claims),sum(recorded_claims),sum(recorded_amount) FROM segment_report GROUP BY dimension ORDER BY dimension').fetchall():
         expected=[m[0],m[1],m[2],b[0],b[1]]
         check(f'Segment reconciliation: {row[0]}',all(math.isclose(x,y,rel_tol=1e-9) for x,y in zip(row[1:],expected)),'Every dimension reconciles all five base totals')
     return checks
