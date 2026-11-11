@@ -34,3 +34,5 @@ The original test partition had already been inspected before these diagnostic e
 - The real-data job builds and installs a wheel, checks its dashboard assets, and rebuilds original data through the installed package.
 
 These checks verify reproducibility and reporting integrity. Business-user acceptance, independent external review and later-period validation require additional evidence.
+
+The first cross-platform segment-bootstrap check exposed a roughly 4.5e-9 endpoint difference. Segment resampling now uses PCG64 integer indices in canonical policy-outcome order. The strict 1e-9 numerical comparison remains in place; no reproduction tolerance was relaxed.

@@ -21,7 +21,7 @@ The [decision brief](reports/EXECUTIVE_MEMO.md) explains the implications and li
 
 ## A finding worth investigating
 
-The 18–24 driver-age segment has recorded cost of **940.26 per policy-year**, with a wide policy-bootstrap interval of **372.85–1,735.24**. A single policy contributes **34.7%** of its recorded amount. Investigate tail influence and uncertainty before treating an average as a stable future cost.
+The 18–24 driver-age segment has recorded cost of **940.26 per policy-year**, with a wide policy-bootstrap interval of **418.39–1,614.26**. A single policy contributes **34.7%** of its recorded amount. Investigate tail influence and uncertainty before treating an average as a stable future cost.
 
 The Segment robustness view covers all 42 reporting segments, preserving policy-level frequency, amount and exposure together. Rank stability is exploratory; it is not a future-risk probability or a pricing rule.
 

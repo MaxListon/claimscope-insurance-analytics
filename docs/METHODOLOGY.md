@@ -47,7 +47,7 @@ The model improvement interval uses 400 paired policy resamples, seed 20261111. 
 Cumulative top-1, top-5 and top-10 amount-record influence is reported separately from the percentile scenarios. Exclude those records from linked cost while retaining all original exposure; source amount shares include all source records. Identical amounts are ordered stably and not deduplicated.
 
 ## Segment-level uncertainty and rank stability
-Within each reporting segment, independently resample whole policies with replacement 400 times, retaining paired exposure, reported count and linked recorded amount. Compress identical triples into multinomial multiplicities; this is equivalent to empirical policy resampling. Batches of 25 limit temporary memory. A namespaced SHA-256 of dimension and segment defines the seed.
+Within each reporting segment, independently resample whole policies with replacement 400 times, retaining paired exposure, reported count and linked recorded amount. Sort empirical outcome triples into canonical order, preserving every policy multiplicity, and draw uniform integer policy indices using PCG64. One draw at a time bounds temporary memory and avoids platform-sensitive multinomial probability boundaries. A namespaced SHA-256 of dimension and segment defines the seed.
 
 Each draw computes sum(count)/sum(exposure) and sum(amount)/sum(exposure). Central 95% percentile intervals condition on observed policies and fixed segment sizes. They avoid a Poisson outcome assumption but still assume independent policies and cannot represent unseen extreme losses. Repeated customers are not identifiable. Zero-claim segments have degenerate empirical frequency intervals; retain the complementary Poisson upper bound in the Segment explorer.
 

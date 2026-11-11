@@ -12,10 +12,10 @@ DIMENSIONS = {
 
 
 def bootstrap_rates(frame, repetitions=400, seed=20261112):
-    """Resample full policies using compressed empirical outcome multiplicities.
+    """Resample full policies in canonical order using integer indices.
 
-    Frequency and cost use the SAME draw and exposure denominator. Batches bound
-    temporary memory independently of the requested repetition count.
+    Frequency and cost use the SAME draw and exposure denominator. One draw at a
+    time bounds temporary memory independently of the repetition count.
     """
     values = frame[['Exposure', 'ClaimNb', 'recorded_amount']].to_numpy(dtype=float)
     if len(values) == 0 or not np.isfinite(values).all() or (values[:, 0] <= 0).any():
@@ -25,14 +25,17 @@ def bootstrap_rates(frame, repetitions=400, seed=20261112):
     if repetitions < 2:
         raise ValueError('At least two bootstrap repetitions required')
     unique, counts = np.unique(values, axis=0, return_counts=True)
-    rng = np.random.default_rng(seed)
-    rates = []
-    for start in range(0, repetitions, 25):
-        draw = rng.multinomial(len(values), counts / len(values), size=min(25, repetitions-start))
-        exposure = draw @ unique[:, 0]
-        rates.append(np.column_stack((draw @ unique[:, 1] / exposure,
-                                      draw @ unique[:, 2] / exposure)))
-    return np.vstack(rates)
+    # Canonical order makes row ordering irrelevant. Integer policy draws avoid
+    # probability-boundary differences in multinomial kernels across platforms.
+    canonical = np.repeat(unique, counts, axis=0)
+    rng = np.random.Generator(np.random.PCG64(seed))
+    rates = np.empty((repetitions, 2))
+    for repetition in range(repetitions):
+        sample = rng.integers(0, len(canonical), len(canonical))
+        exposure, claims, amount = canonical[sample].sum(axis=0)
+        rates[repetition] = claims / exposure, amount / exposure
+    return rates
+
 
 
 def segment_robustness(frame, repetitions=400):
