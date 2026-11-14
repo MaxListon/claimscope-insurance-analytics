@@ -8,7 +8,7 @@
     "src/claimscope/model.py": "f00b95beff0d963608f52805531cdaa79149bd63b7808875056cad2781268a2c",
     "src/claimscope/pipeline.py": "c1b06cee45f567c4a1a5ee0e81578e67486feb71c2ff626ee2a5e3f767f0c83f",
     "src/claimscope/portfolio.py": "4b90af6b8a6182a4fe5e106e270dd9cb0712dd807c34624ca2d12f2764b5368d",
-    "src/claimscope/presentation.py": "d00a91f89d54fb3b8a2f5ae2dda84953a1c93a76de208f04144d249bff29a8fe",
+    "src/claimscope/presentation.py": "02450b842c0941e93e8f38d4ab8fd8e5e006eaa3498e16c1c733867b6382a971",
     "src/claimscope/quality.py": "e5ffae65b07b4f63543643b87d54f03cb68b613d496dc2892fc2190f697b6257",
     "src/claimscope/robustness.py": "174087a70350ed4b2a5f95d9cdb25a23549d9fc5618121c71e1328574e2f0064",
     "src/claimscope/statistics.py": "8d2632e29e93333b9be11b586aa94f65ba8323327c5c8f3d56fae08a7ea4aa28",
@@ -20,7 +20,7 @@
   },
   "outputs": {
     "index.html": "d9f6ae3abccab47ee91efc57cb77c5ceecc96b8296d733247df501dbbc290e59",
-    "reports/EXECUTIVE_MEMO.md": "1d6bd055d7d937900182fdf390f4893545565521a0e5faa80943765696f62263",
+    "reports/EXECUTIVE_MEMO.md": "8bdb2dc73e82e0f5ebc85d8463389484593a9e02ebcd63304bb1110162de9f21",
     "reports/analysis.json": "0f01e231f65545c88f91ec22b1344b5c9db89c71ab293f8bf3d2b8e1893068c8",
     "reports/calibration.csv": "907f8bd1e9b89aad0c9cb6a2228c5e41a0431301c73ebf5cf53303fa322dc24e",
     "reports/quality.json": "f572219678c6dc1866295f92c6a8da13e2b0da01d4fdef7e17763c57e2aeffe3",
