@@ -69,7 +69,7 @@ Pinned .rda sources → SHA-256 verification → input contracts
   → staged HTML / CSV / JSON / executive memo
 ```
 
-[Runbook](docs/RUNBOOK.md) · [Data dictionary](docs/DATA_DICTIONARY.md) · [Six-week development scope](docs/DEVELOPMENT_SCOPE.md) · [Interview guide](docs/INTERVIEW_GUIDE.md)
+[Runbook](docs/RUNBOOK.md) · [Data dictionary](docs/DATA_DICTIONARY.md)
 
 ## Verification
 
