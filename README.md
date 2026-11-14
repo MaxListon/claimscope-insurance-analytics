@@ -17,16 +17,16 @@ An auditable reporting system for real French motor insurance data. ClaimScope s
 - **16 of 22 regions** support primary age standardization, covering 97.4% of portfolio exposure.
 - **4.08% lower held-out deviance** than a constant-rate baseline (95% paired bootstrap interval: 3.63%–4.48%). Removing bonus/malus leaves 1.63% improvement.
 
-The [decision brief](reports/EXECUTIVE_MEMO.md) explains the implications and limitations. These historical findings support investigation, not realized savings or future-year performance claims.
+The [decision brief](reports/EXECUTIVE_MEMO.md) explains the implications and limitations. Treat these as historical findings that justify investigation — they aren't realized savings or a claim about future-year performance.
 
 ## A finding worth investigating
 
 The 18–24 driver-age segment has recorded cost of **940.26 per policy-year**, with a wide policy-bootstrap interval of **418.39–1,614.26**. A single policy contributes **34.7%** of its recorded amount. Investigate tail influence and uncertainty before treating an average as a stable future cost.
 
-The Segment robustness view covers all 42 reporting segments, preserving policy-level frequency, amount and exposure together. Rank stability is exploratory; it is not a future-risk probability or a pricing rule.
+The Segment robustness view covers all 42 reporting segments, preserving policy-level frequency, amount and exposure together. Rank stability here is exploratory, not a future-risk probability or a pricing rule.
 
 ## The decision
-Which portfolio segments warrant investigation, and can the underlying figures be trusted? The deliverable is a review shortlist and a reconciliation report, not a pricing engine. The output helps prioritize data review and segment investigation; it does not quote insurance premiums.
+Which portfolio segments warrant investigation, and can the underlying figures be trusted? What this produces is a review shortlist and a reconciliation report rather than a pricing engine — useful for prioritizing data review and segment investigation, but it doesn't quote insurance premiums.
 
 ## What is built
 - Two pinned original CASdatasets R data files, read directly in Python. No R installation is needed.
@@ -80,6 +80,6 @@ Pinned .rda sources → SHA-256 verification → input contracts
 ## Scope and attribution
 Data: freMTPL2freq and freMTPL2sev in [CASdatasets](https://github.com/dutangc/CASdatasets), maintained by Christophe Dutang, Arthur Charpentier, and contributors. The upstream package declares GPL (>= 2); source versions and links are in `data/sources.json`. Dataset authorship is distinct from this repository's commit authorship. No underlying raw data are committed.
 
-This is historical French motor insurance research data, not current customer data. There are no reliable policy dates, claim IDs, premium fields, or comprehensive valuation metadata. Some claim amounts follow IRSA-IDA settlement conventions. No loss ratio, future profitability, causal effect, or actual savings is claimed. The random policy holdout is not temporal or customer-level validation.
+This is historical French motor insurance research data rather than current customer data, and it's missing reliable policy dates, claim IDs, premium fields, and comprehensive valuation metadata. Some claim amounts follow IRSA-IDA settlement conventions. Nothing here claims a loss ratio, future profitability, causal effect, or actual savings, and the random policy holdout doesn't amount to temporal or customer-level validation.
 
 Project repository owner: Max Liston. Licensed under GPL-2.0-or-later; see [LICENSE](LICENSE).
